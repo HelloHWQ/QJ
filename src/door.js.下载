@@ -1,0 +1,20 @@
+var urlPrex = "//h5.hunlihu.com/vashow/ly/door/door/";
+var urlDomain = "//h5.hunlihu.com/";
+function choosetheface(img,sm_id){
+	var imgs = "<img class='viewface' src='"+$(img).attr('src')+"'>";
+	if(sm_id){
+		sm_id = "_"+sm_id;
+	}else{
+		sm_id = "";
+	}
+	var concon = $("#inputhopedetail"+sm_id);
+	if(concon.find(".viewface").length>2){
+		mtips("只能选择3个表情哦!");
+	}else{
+		$("#inputhopedetail"+sm_id).append(imgs);
+	}
+}
+
+function recordUserInfo(){
+	$.post(urlPrex+"footmark?"+randomNumber,{auth:auth,openid:openid,nickname:nickname,headimgurl:headimgurl});
+}

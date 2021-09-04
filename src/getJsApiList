@@ -1,0 +1,9 @@
+wx.config({
+debug:false,
+appId:'wx290967200869ac7c',
+timestamp:1628952615,
+nonceStr:'abeb9521eea82235',
+signature:'a7f6a4cc1bfba4eb090f909f81956c3096ffc831',
+jsApiList:['onMenuShareAppMessage','onMenuShareTimeline','onMenuShareQQ','hideOptionMenu','hideMenuItems','chooseWXPay','openLocation','getLocation'],
+openTagList:['wx-open-launch-app','wx-open-launch-weapp']
+});

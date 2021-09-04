@@ -1,0 +1,158 @@
+var playi = 0;
+function playbtnw(color){
+	var inter = setInterval(function(){
+		$("#wishdanmu").append("<div ontouchstart='viewOneWishDetail(this)' srcc='"+sData[playi]+"' style='font-size:13px;color:white;position:absolute;top:70;left:0;background:"+color+
+				";height:28px;line-height:28px;margin:3px 0px;border-radius:20px;padding:0px 15px;overflow: hidden;text-overflow: ellipsis;'>"+
+				sData[playi]+"</div>");
+		$("#wishdanmu").find("div").animate({top:'-=35'});
+		var divlen = $("#wishdanmu").find("div").length;
+		if(divlen>3){
+			$("#wishdanmu").find("div").eq(0).remove();
+		}
+		playi++;
+		if(playi==sData.length){
+			playi = 0;
+		}
+	},3000);
+}
+
+
+function viewOneWishDetail(dom){
+	var nameAndMsg = $(dom).attr("srcc");
+	//var arr = nameAndMsg.split("：");
+	var ind = nameAndMsg.indexOf("：");
+	var name = nameAndMsg.substring(0,ind);
+	var wish = nameAndMsg.substring(parseInt(ind)+1);
+	var html = "<div id='wishdetaildiy'><div style='position:absolute;top:0;left:0;background:rgba(0,0,0,0.7);width:100%;height:100%;z-index:1414521'></div>"+
+	"<div style='border-radius: 10px;width:80%;position: fixed;top: 50%;left: 10%;max-height: 100%;overflow-y: auto;background-color: #fff;-webkit-transform: translateY(-40%);transform: translateY(-40%);z-index: 1414522;' >"+
+	"<img src='https://qnm.hunliji.com/o_1blaqnfq612e8arl1lb3g53n2u7.png' style='position: absolute;right: 0;top: 0;width: 30px;z-index: 100;' ontouchstart='closewishdetail()'>"+
+	" <div style='width: calc(100% - 64px);background: #fff;font-size: 16px;padding: 25px 32px;overflow: auto;'><p style='font-weight:700;font-size: 18px;margin:10px 0px;'>"+name+"：</p> <p style='margin-bottom:10px;'>"+wish+"</p></div></div></div>";
+	$('body').prepend(html);
+}
+
+function closewishdetail(){
+	$("#wishdetaildiy").remove();
+
+}
+
+var myListHide = SList();
+var face_img_index = 1;
+var WishSprite = function(dom,theDatas){
+	this.css_color = dom.attr("css_color");
+	this.font_color = dom.attr("font_color");
+	this.theCon = dom;
+	this.dataList = myListHide;
+	if(theDatas){
+		var index = 1;
+		for(var i = 0;i<theDatas.length;i++){
+	    	myListHide.put("<div class='hopeinfo'>face_img_fac"+face_img_index+".jpg_face_img"+theDatas[i]+"</div>");
+	    	face_img_index++;
+	    	if(face_img_index==15)face_img_index = 1;
+		}
+	}
+	this.interId = null;
+}
+WishSprite.prototype = {
+	play:function(){
+		var hopescon = this.theCon;
+		var css_color = this.css_color;
+		var font_color = this.font_color;
+		var list = this.dataList;
+		var theDifOne = list.getDif();
+		var theLastHeight = 16;
+		var theRightDelay = 0;
+		if(theDifOne){
+			var dom1 = $(theDifOne).appendTo(hopescon);
+			var imgs = dom1.find("img");
+			var texts = dom1.text();
+			if(texts.length>75){
+				dom1.css("font-size","10px");
+			}
+			texts = texts.replaceAll("face_img_","<img class='myf_imgs' src='//s.xiaomaomv.com/static/").replaceAll("_face_img","'/>");
+			dom1.html(texts);
+			imgs.appendTo(dom1);
+			var width = dom1.width();
+			if(width>270){
+				dom1.width(270);
+			}
+			if(css_color){
+				dom1.css("background-color",css_color);
+			}
+			if(font_color){
+				dom1.css("color",font_color);
+				dom1.find('td').css("color",font_color);
+			}
+			dom1[0].addEventListener("webkitAnimationEnd", function(){
+				dom1.remove();
+			},false);
+			theLastHeight = dom1.height();
+		}
+		var intervalId = setInterval(function(){
+			var theDifOne = list.getDif();
+			if(theDifOne){
+				var delay = parseFloat((Math.abs(theLastHeight-16)/36).toFixed(2));
+				theRightDelay = theRightDelay + delay;
+				var dealTheDifOne = theDifOne.replace("'hopeinfo'","'hopeinfo' style='background-color:"+css_color+";-webkit-animation-delay:"+theRightDelay+"s;'");
+				
+				var dom = $(dealTheDifOne).appendTo(hopescon);
+				var imgs = dom.find("img");
+				var texts = dom.text();
+				if(texts.length>75){
+					dom.css("font-size","10px");
+				}
+				texts = texts.replaceAll("face_img_","<img class='myf_imgs' src='//s.xiaomaomv.com/static/").replaceAll("_face_img","'/>");
+				dom.html(texts);
+				imgs.appendTo(dom);
+				
+				var width = dom.width();
+				if(width>270){
+					dom.width(270);
+				}
+				if(css_color){
+					dom.css("background-color",css_color);
+				}
+				if(font_color){
+					dom.css("color",font_color);
+					dom.find('td').css("color",font_color);
+				}
+				dom[0].addEventListener("webkitAnimationEnd", function(){
+					dom.remove();
+				},false);
+				theLastHeight = dom.height();
+			}
+		},1500);
+		this.interId = intervalId;
+	},
+	stop:function(){
+		var interId = this.interId;
+		clearInterval(interId);
+		this.theCon.html('');
+	}
+};
+function SList(){
+    var array = new Array();
+    var theSize = 0;
+	var theIndex = 0;
+    array.put = function(value){
+    	array.push(value);
+    	theSize++;
+    }
+    array.rightPut = function(value){
+    	array.splice(theIndex,0,value);
+    	theSize++;
+    }
+    array.getDif = function(){
+    	if(theSize>0){
+	    	var res = array[theIndex];
+	        if(theIndex<(theSize-1)){
+	        	theIndex++;
+	        }else{
+	        	theIndex = 0;
+	        }
+	    	return res;
+    	}else{
+    		return null;
+    	}
+    }
+    return array;
+}
